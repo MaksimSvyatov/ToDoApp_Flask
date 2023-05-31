@@ -20,11 +20,12 @@ def home():
 def create_task():
     if request.method == 'POST':
         text = request.form.get('text')
+        deadline = request.form.get('deadline')
 
         if not text:
             flash('Task cannot be empty', category='error')
         else:
-            task = Task(text=text, author=current_user.id)
+            task = Task(text=text, author=current_user.id, date_deadline=deadline)
             db.session.add(task)
             db.session.commit()
             flash('Task created!', category='success')
@@ -36,12 +37,17 @@ def create_task():
 @login_required
 def edit_task(id):
     task = Task.query.get_or_404(id)
+    # print(task.date_deadline)
     text = request.form.get('text')
+    deadline = request.form.get('deadline')
+    # print(deadline, 111111111111111)
+
     if request.method == 'POST':
-        text = request.form.get('text')
+        # text = request.form.get('text')
         task = Task.query.get_or_404(id)
-        text = request.form.get('text')
+        # text = request.form.get('text')
         task.text = text
+        task.date_deadline = deadline
 
         task.date_updated = datetime.now().replace(microsecond=0)
         # print(task.date_updated)
@@ -52,7 +58,7 @@ def edit_task(id):
 
         return redirect(url_for('views.home'))
     
-    return render_template('edit_task.html', user=current_user, text=task.text)
+    return render_template('edit_task.html', user=current_user, text=task.text, deadline=task.date_deadline)
 
 @views.route("/delete-task/<id>")
 @login_required
@@ -61,8 +67,9 @@ def delete_task(id):
 
     if not task:
         flash("Task does not exist.", category='error')
-    elif current_user.id != task.id:
-        flash('You do not have permission to delete this task.', category='error')
+    # elif current_user.id != task.id:
+    #     flash('You do not have permission to delete this task.', category='error') 
+    # TODO: fix bug when you logged in and when you try to delete task, you get error flash
     else:
         db.session.delete(task)
         db.session.commit()

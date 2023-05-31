@@ -18,6 +18,7 @@ class Task(db.Model):
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     date_updated = db.Column(db.DateTime(timezone=True), default=func.now())
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False) # user is adobted for SQL class User. It is not just some variable name
+    date_deadline = db.Column(db.String(150))
     # users_task = db.relationship('User', backref='users_task', passive_deletes=True)
     # comments = db.relationship('Comment', backref='post', passive_deletes=True)
     # likes = db.relationship('Like', backref='post', passive_deletes=True)
