@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from os import path
 from flask_login import LoginManager
 
@@ -21,6 +22,8 @@ def create_app():
     from .models import User, Task #, Comment, Like # import all models before creating database
 
     create_database(app) # call database
+    migrate = Migrate(app, db)
+
 
     login_manager = LoginManager() # init login manager
     login_manager.login_view = "auth.login" # redirect to login view
@@ -37,3 +40,4 @@ def create_database(app):
     with app.app_context():
         db.create_all()
         print ("Created database!")
+

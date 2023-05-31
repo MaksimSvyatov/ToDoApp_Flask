@@ -2,6 +2,9 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from flask_login import login_required, current_user
 from .models import Task, User#, Comment, Like
 from . import db
+from datetime import datetime
+import time
+
 
 views = Blueprint('views', __name__)
 
@@ -39,7 +42,9 @@ def edit_task(id):
         task = Task.query.get_or_404(id)
         text = request.form.get('text')
         task.text = text
-        print(task, task.text)
+
+        task.date_updated = datetime.now().replace(microsecond=0)
+        # print(task.date_updated)
 
         db.session.add(task)
         db.session.commit()

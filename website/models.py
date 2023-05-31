@@ -16,6 +16,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+    date_updated = db.Column(db.DateTime(timezone=True), default=func.now())
     author = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"), nullable=False) # user is adobted for SQL class User. It is not just some variable name
     # users_task = db.relationship('User', backref='users_task', passive_deletes=True)
     # comments = db.relationship('Comment', backref='post', passive_deletes=True)
